@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="hData-core" default="default" basedir=".">
+    <description>Builds, tests, and runs the project hData-core.</description>
+
+    <property name="tools.dir" value="resources/tools" />
+    <property name="ant.contrib.jar" value="${tools.dir}/ant-contrib-0.6.jar" />
+
+    <property name="xsd-schemas" value="build/xsd-schemas" />
+    <property name="rng-schemas" value="resources/schemas"/>
+
+    <pathconvert property="rng-files" pathsep=",">
+        <mapper>
+            <chainedmapper>
+                <flattenmapper />
+                <globmapper from="*.rng" to="*" />
+            </chainedmapper>
+        </mapper>
+        <path>
+            <fileset dir="resources/schemas" includes="*.rng" />
+        </path>
+    </pathconvert>
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${ant.contrib.jar}"/>
+        </classpath>
+    </taskdef>
+
+    <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" >
+        <classpath>
+            <fileset dir="lib/jaxb" includes="**/*.jar"/>
+        </classpath>
+    </taskdef>
+
+    <macrodef name="rng2xsd" description="Conversion from RNG to XSD schemas">
+        <attribute name="rng" />
+        <attribute name="xsd" />
+        <sequential>
+            <echo message="Convert RNG schema (trang): @{rng}"/>
+            <java classname="com.thaiopensource.relaxng.translate.Driver"
+               failonerror="true" maxmemory="128m" fork="true">
+                <!-- <arg value="-o"/>
+                <arg value="disable-abstract-elements"/>  -->
+                <arg value="-I"/>
+                <arg value="rng"/>
+                <arg value="-O"/>
+                <arg value="XSD"/>
+                <arg value="@{rng}"/>
+                <arg value="@{xsd}"/>
+                <classpath>
+                    <pathelement location="resources/tools/trang-20081028.jar"/>
+                </classpath>
+            </java>
+        </sequential>
+    </macrodef>
+
+
+    <import file="nbproject/build-impl.xml"/>
+
+    <target name="-pre-compile">
+        <outofdate>
+            <sourcefiles>
+                <fileset dir="resources/schemas/" includes="**/*.rng" />
+            </sourcefiles>
+            <targetfiles path="build/gen-src/">
+            </targetfiles>
+            <sequential>
+                <!-- echo message="Converting RNG Schemas..."/>
+                <mkdir dir="${xsd-schemas}"/>
+                <for list="${rng-files},core_data_types" param="file">
+                    <sequential>
+                        <rng2xsd rng="${rng-schemas}/@{file}.rng" xsd="${xsd-schemas}/@{file}.xsd" />
+                    </sequential>
+                </for -->
+                <echo message="Compiling the XSD schemas..."/>
+                <mkdir dir="build/gen-src"/>
+                <xjc binding="resources/binding.xml" destDir="build/gen-src">
+                    <schema dir="../hData/schemas/2009/06">
+                        <include name="*.xsd"/>
+                    </schema>
+                    <produces dir="build/gen-src/org/mitre/hdata/core" includes="**/*.java"/>
+                </xjc>
+            </sequential>
+        </outofdate>
+    </target>
+</project>
