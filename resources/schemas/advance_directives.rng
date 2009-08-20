@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  xmlns:tx="http://www.thaiopensource.com/ns/relaxng/xsd"
+  tx:enableAbstractElements="true">
+  
+  
+
+  <include href="core_data_types.rng"/>
+  
+  <a:documentation>
+    Definition of advance dircetive
+    
+    type: the coded value of the type of advanced directive
+    date: the effective data of the directive
+    custodian: The person or organization that can provide a copy of the document
+    
+  </a:documentation>
+  <start>
+    <element name="advanceDirective" ns="http://projecthdata.org/hdata/schemas/advanceDirective/2009/06/">
+      <element name="type">
+        <ref name="codedValue"/>
+      </element>
+      <ref name="date"/>
+      <element name="custodian">
+        <ref name="actor"/>
+      </element>
+      <ref name="abstractSection"/>
+    </element>
+  </start>
+</grammar>

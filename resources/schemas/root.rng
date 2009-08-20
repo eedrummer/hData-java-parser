@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+    xmlns="http://relaxng.org/ns/structure/1.0"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns:tx="http://www.thaiopensource.com/ns/relaxng/xsd"
+    tx:enableAbstractElements="true">
+    
+
+    <start>
+        <element name="root" ns="http://projecthdata.org/hdata/schemas/core/2009/06/">
+            <interleave>
+                <element name="documentid">
+                    <text/>
+                </element>
+                <element name="version">
+                    <text/>
+                </element>
+                <element name="created">
+                    <data type="date"/>
+                </element>
+                <element name="lastmodified">
+                    <data type="date"/>
+                </element>
+                <element name="extensions">
+                    <zeroOrMore>
+                        <element name="extension">
+                            <ref name="extension"/>
+                        </element>
+                        
+                    </zeroOrMore>
+                </element>
+                <element name="sections">
+                    <zeroOrMore>
+                        <ref name="section-definition"/>
+                    </zeroOrMore>
+                </element>
+            </interleave>
+        </element>
+    </start>
+    <define name="extension" ns="http://projecthdata.org/hdata/schemas/core/2009/06/">
+        <attribute name="requirement">
+            <choice>
+                <value>mandatory</value>
+                <value>optional</value>
+            </choice>
+        </attribute>
+        <!-- this should be a URN -->
+        <text/>
+    </define>
+    <define name="section-definition">
+        <element name="section" ns="http://projecthdata.org/hdata/schemas/core/2009/06/">
+            <interleave>
+                <attribute name="class">
+                    <text/>
+                </attribute>         
+                <attribute name="path">
+                    <!-- We should obviously limit the path here to URI compatible path segments -->
+                    <text/>
+                </attribute>
+                <attribute name="name">
+                    <text/>
+                </attribute>
+                <attribute name="uid">
+                    <text/>
+                </attribute>
+            </interleave>
+            <zeroOrMore>
+                <ref name="section-definition"/>    
+            </zeroOrMore>
+        </element>
+    </define>
+</grammar>

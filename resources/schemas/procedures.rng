@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <include href="core_data_types.rng"/>
+    <start>
+      <element name="procedure" ns="http://projecthdata.org/hdata/schemas/procedure/2009/06/">
+        <ref name="dateRange"/>
+        <ref name="actor"/>
+        <ref name="abstractSection" />
+        
+      </element>
+    </start>
+</grammar>

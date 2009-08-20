@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  
+  <include href="core_data_types.rng"></include>
+  
+  <start>
+    
+    <element name="provider"  ns="http://projecthdata.org/hdata/schemas/provider/2009/06/">      
+      
+      <ref name="dateRange"></ref>
+      <element name="patientId"><text/></element>
+      <element name="role"><ref name="codedValueDef"/></element>
+      <element name="type"><ref name="codedValueDef"/></element>
+      
+      <ref name="actor"/>
+      <ref name="abstractSection"/>
+      
+    </element>
+    
+  </start>
+  
+  
+  
+  
+</grammar>

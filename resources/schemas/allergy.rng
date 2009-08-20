@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  xmlns:tx="http://www.thaiopensource.com/ns/relaxng/xsd"
+  tx:enableAbstractElements="true">
+ 
+  <include href="core_data_types.rng"></include>
+    <a:documentation>
+      
+      Definition of allergy entries.
+      
+      date: date when the allergy was known to be active
+      type: the coded value of the allergy, 
+      product: the item that the individual has an allergy to. The coded value of the product shale be described in the code codeSystem and displayName attributes of the product with the name of the 
+               product being described in the name element
+               
+       reaction: coded value of the reaction 
+       severity: coded value of the severity of the reaction to the product
+       
+    </a:documentation>
+    <start>
+      <element name="allergy" ns="http://projecthdata.org/hdata/schemas/allergy/2009/06/">
+        <ref name="date"></ref>
+
+        <element name="type">
+          <ref name="codedValue"></ref>
+          
+          <a:documentation> 
+            The type of the allergy/intolerance in question will come from the constrained set of SNOWMED CT codes provided below.
+            This table of information is the same contrained set from the HITSP C32 Allergy section
+            
+            
+            SNOMED CT Preferred Terms            SNOMED  CT Code                  Usage  
+            for Adverse Event Type 
+            
+            
+            propensity to adverse reactions          420134006           Used to record an adverse reaction. 
+            
+            propensity to adverse reactions to       418038007           Used to record an adverse reaction to an environmental agent. 
+            substance 
+             
+             propensity to adverse reactions to      419511003           Used to record an adverse reaction to a drug. 
+            drug 
+            
+            propensity to adverse reactions to       418471000           Used to record an adverse reaction to a food.
+            food 
+              
+            allergy to substance                     419199007            Used to record an allergy to an environmental agent. 
+            drug allergy                             416098002            Used to record an allergy to a drug. 
+            food allergy                             414285001            Used to record an allergy to a food. 
+            drug intolerance                         59037007             Used to record intolerance to a drug. 
+            food intolerance                         235719002            Used to record intolerance to a food. 
+            
+            
+          </a:documentation>         
+         </element>
+        <element name="product">
+          <ref name="codedValue"/>
+          <a:documentation> 
+            The product/substance that the person has an allergy to.
+            
+          </a:documentation>
+          <element name="name"><text/></element>
+        </element>
+       
+        
+        <element name="reaction">
+          
+          <ref name="codedValue"></ref>
+          <a:documentation> 
+            
+            As with the HITSP C32 Document the reaction to the allergy/intolorance shall
+            be expressed  using the VA/KP Problem List Subset of SNOMED CT, and shall be terms that descend from 
+            the clinical finding (404684003) concept. The OID for this vocabulary is 2.16.840.1.113883.6.96. The problem list subset 
+            can be obtained from www.cancer.gov/cancertopics/terminologyresources/FDA. 
+          </a:documentation>
+          
+        </element>
+        <element name="severity">
+          <ref name="codedValue"></ref>
+          <a:documentation> 
+            
+            The severity of a given allergy/intolorance shall be expressed from the constrained set of SNOWMED CT codes:
+           
+           SNOMED CT Preferred                SNOMED CT Code 
+           Terms for Severity 
+              
+            mild                              255604002 
+            mild to moderate                  371923003 
+            moderate                          6736007 
+            moderate to severe                371924009 
+            severe                            24484000 
+            fatal                             399166001 
+            
+            
+          </a:documentation>
+          
+        </element>
+        
+        <ref name="abstractSection"/>
+      </element>
+    </start>
+  
+
+</grammar>

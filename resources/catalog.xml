@@ -1,0 +1,5 @@
+
+<catalog xmlns="urn:oasis:names:rc:entity:xmlns:xml:catalog" prefer="system">
+    <!--<system systemId="http://mitre.org/hdata/core/2009/06/"
+        uri="../build/xsd-schemas/root.xsd"/> -->
+</catalog>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  xmlns:tx="http://www.thaiopensource.com/ns/relaxng/xsd"
+  tx:enableAbstractElements="true">
+  
+  <include href="core_data_types.rng"></include>
+    <a:documentation>
+      Conditions Module.
+      
+      Used to define conditions/problems that a patient has or has had in the past. 
+      
+      date: the date the patient had the issue
+      type: the codedValue of the problem - the codedElements will be present in the code, codeSystem and displayName attributes of the type element
+            with a free text description being provide as the body of the type
+      treatingProvider:  the primary person or organization that treated the patient for the problem
+      onsetAge: the age of the indivdule when the problem occured
+      
+      
+    </a:documentation>
+    <start>
+      <element name="problem"  ns="http://projecthdata.org/hdata/schemas/conditions/2009/06/">
+        
+        <ref name="dateRange"/>
+        <element name="type"><ref name="codedValue"/></element>
+        <optional>
+          <zeroOrMore>
+          <element name="treatingProvider">
+           <ref name="dateRange"/>
+           <ref name="actor"/>
+          </element>
+          </zeroOrMore>
+        </optional>
+        <ref name="abstractSection"/>
+      </element>
+    </start>
+
+
+</grammar>

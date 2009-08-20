@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  
+  <include href="core_data_types.rng"></include>
+    <start>
+      <element name="comment"  ns="http://projecthdata.org/hdata/schemas/comments/2009/06/">      
+        <element name="author"><ref name="person.class"></ref></element>
+        <ref name="date"/>
+        <element name="text"><text/></element>
+      
+      </element>
+    </start>
+</grammar>

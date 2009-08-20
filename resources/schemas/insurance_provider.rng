@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns:tx="http://www.thaiopensource.com/ns/relaxng/xsd"
+  tx:enableAbstractElements="true">
+
+    <include href="core_data_types.rng"></include>
+    
+    <a:documentation>
+        Information pertaining to the insurance provider for a pateint
+        
+        groupNumber: the groupNumber of the policy the subscriber belongs to
+        insuranceType: the coded type of insurance such as HMO ...
+        payer: the person or organization responible for payments
+        subscriber: the person or organization that is the subscriber for the insurance
+        
+        
+    </a:documentation>
+    <start>
+        <element name="insuranceProvider" ns="http://projecthdata.org/hdata/schemas/insuranceProvider/2009/06/">
+           
+            <element name="groupNumber"><text></text></element>
+            <element name="insuranceType"> <ref name="codedValueDef"/></element>
+            <element name="name"><text/></element>
+           
+            <element name="payer">
+                <element name="sourceId"><text></text></element>
+              <ref name="actor"/>                  
+            </element>
+
+            <element name="patient">
+                <ref name="person.class" />  
+                <element name="id"><text/></element>        
+                <element name="relationship"><ref name="codedValueDef"/> </element>
+            </element>
+            
+            <element name="subscriber">
+                <element name="id"><text/></element>
+                <ref name="actor"/>
+
+            </element>
+            
+            <element name="guarantor"  > 
+               <ref name="actor"/>
+               <ref name="date"/>
+              
+            </element>
+            <ref name="abstractSection"/>
+        </element>
+    </start>
+       
+</grammar>

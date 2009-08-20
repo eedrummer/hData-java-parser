@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  xmlns:tx="http://www.thaiopensource.com/ns/relaxng/xsd"
+  tx:enableAbstractElements="true">
+  <include href="core_data_types.rng"></include>
+
+<a:documentation>
+  
+  refusal:
+  date: effective date of immunization
+  seriesNumber: 
+  performer: The person or organization who performed the immunization
+  product: the immuniozation product
+  
+</a:documentation>
+  <start>
+    <element name="immunization"  ns="http://projecthdata.org/hdata/schemas/immunization/2009/06/">
+      
+      <element name="refusal"><text></text></element>
+      <ref name="date"/>
+      <element name="seriesNumber"><text/></element>
+      <element name="performer">
+        <ref name="actor"/>
+      </element>
+      <element name="product">
+        <element name="name"><ref name="codedValueDef"></ref></element>
+        <element name="material">
+          <ref name="codedValueDef"></ref>
+          <attribute name="lotNumber"></attribute>
+        </element>
+        <element name="manufacturer"><ref name="organization.class"/></element>
+        <ref name="abstractSection"/>
+      </element>
+    </element>
+  </start>
+
+  
+</grammar>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" 
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  xmlns:tx="http://www.thaiopensource.com/ns/relaxng/xsd"
+  tx:enableAbstractElements="true">
+
+  <include href="core_data_types.rng"/>
+
+
+<a:documentation>
+  
+  
+</a:documentation>
+  <start>
+    <element name="result" ns="http://projecthdata.org/hdata/schemas/results/2009/06/">
+      
+      <element name="id">
+        <text/>
+      </element>
+      <ref name="date"/>
+      <element name="resultType">
+        <ref name="codedValueDef"/>
+      </element>
+        <ref name="UnitValue"></ref>
+      <element name="interpretation">
+        <ref name="codedValueDef"/>
+      </element>
+      <element name="referenceRange">
+        <text/>
+      </element>
+      
+      <ref name="abstractSection"/>
+    </element>
+  </start>
+  
+  
+  <define name="UnitValue" ns="http://projecthdata.org/hdata/schemas/results/2009/06/">
+    <element name="unitValue" ns="http://projecthdata.org/hdata/schemas/results/2009/06/">
+      <attribute name="units"/>
+      <attribute name="value"/>
+    </element>   
+    
+  </define>
+</grammar>

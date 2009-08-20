@@ -98,7 +98,6 @@ public class Serialize {
                 p.setAdministrativeGender(Patient.Gender.MALE);
 
                 Language lang = new Language();
-                lang.setPrefered(Boolean.TRUE);
                 lang.setCode("SCO");
                 lang.setCodeSystem("ISO 639-2");
                 lang.setDisplayName("Scots");
