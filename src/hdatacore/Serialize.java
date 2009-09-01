@@ -177,7 +177,7 @@ public class Serialize {
                 patientinformation.addSectionDocument(p);
                 hrf.addSection(patientinformation, "/");
 
-                Section adverse = new Section("Adverse Reactions", new URI("urn:empty"), "adversereactions");
+                Section adverse = new Section("Adverse Reactions", new URI(Allergy.TYPEID), "adversereactions");
                 hrf.addSection(adverse, "/");
 
                 Section allergies = new Section("Allergies", new URI(Allergy.TYPEID), "allergies");
@@ -205,7 +205,7 @@ public class Serialize {
                 hrf.addSection(allergies, "/adversereactions");
 
                 try {
-                    HRFFileSystemSerializer ser = HRFFileSystemSerializer.getInstance();
+                    HRFFileSystemSerializer ser = new HRFFileSystemSerializer();
 
                     ser.serialize(new File("/tmp/hrf/patient"), hrf);
                 } catch (IOException ex) {

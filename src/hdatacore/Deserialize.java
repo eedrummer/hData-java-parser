@@ -32,7 +32,7 @@ public class Deserialize {
 
         try {
             HRF hrf = null;
-            HRFFileSystemSerializer des = HRFFileSystemSerializer.getInstance();
+            HRFFileSystemSerializer des = new HRFFileSystemSerializer();
 
             des.registerExtension(Patient.TYPEID, Patient.class);
             des.registerExtension("urn:empty", null);

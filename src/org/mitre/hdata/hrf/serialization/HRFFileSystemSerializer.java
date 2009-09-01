@@ -19,7 +19,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.mitre.hdata.hrf.HRF;
-import org.mitre.hdata.hrf.HRFException;
 import org.mitre.hdata.hrf.HRFFactory;
 import org.mitre.hdata.hrf.Section;
 import org.mitre.hdata.hrf.SectionDocument;
@@ -31,17 +30,19 @@ import org.projecthdata.hdata.schemas._2009._06.core.Sections;
  *
  * @author GBEUCHELT
  */
-public class HRFFileSystemSerializer {
+public class HRFFileSystemSerializer implements HRFSerializer {
 
     HashMap<String, Class> registeredExtensions;
-    private static final HRFFileSystemSerializer instance = new HRFFileSystemSerializer();
-
-    private HRFFileSystemSerializer() {
+    
+    public HRFFileSystemSerializer() {
         registeredExtensions = new HashMap<String, Class>();
     }
 
-    public static HRFFileSystemSerializer getInstance() {
-        return instance;
+    public void serialize(Object o, HRF hrf) throws Exception {
+        if (! o.getClass().equals(File.class)) {
+            throw new IllegalArgumentException();
+        }
+        this.serialize((File) o, hrf);
     }
 
     public void serialize(File location, HRF hrf) throws IOException {
@@ -73,6 +74,13 @@ public class HRFFileSystemSerializer {
             throw th;
         }
 
+    }
+
+    public HRF deserialize(Object o) throws Exception {
+        if (! o.getClass().equals(File.class)) {
+            throw new IllegalArgumentException();
+        }
+        return this.deserialize((File) o);
     }
 
     public HRF deserialize(File location) throws IOException, ExtensionMissingException, HRFSerialializationException {
@@ -207,6 +215,10 @@ public class HRFFileSystemSerializer {
 
     public void registerExtension(String uri, Class clazz) {
         registeredExtensions.put(uri, clazz);
+    }
+
+    public Class resolveExtension(String uri) {
+        return registeredExtensions.get(uri);
     }
 
     // <editor-fold defaultstate="collapsed" desc="private methods">
