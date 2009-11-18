@@ -19,20 +19,26 @@ package org.mitre.hdata.hrf;
 
 import java.io.OutputStream;
 import javax.xml.bind.JAXBException;
+import org.mitre.hdata.hrf.serialization.HRFSerialializationException;
+import org.projecthdata.hdata.schemas._2009._11.metadata.DocumentMetaData;
 
 /**
  * Interface for objects that may be contained in a Section.
  * @author GBEUCHELT
  */
-public interface SectionDocument {
+public abstract class SectionDocument {
 
+    private DocumentMetaData md;
+    private hDataDocument hdd;
 
     /**
      * Method to serialized the object into an OutputStream.
      * @return
      * @throws JAXBException
      */
-    public OutputStream marshall() throws JAXBException;
+    public OutputStream marshall() throws HRFSerialializationException {
+        return hdd.marshall();
+    }
 
     /**
      * A unique document id, that will be used for URL contruction and as an
@@ -40,7 +46,9 @@ public interface SectionDocument {
      * spaces and other characters that can not be represented by simple ASCII characters.
      * @return
      */
-    public String getDocumentId();
+    public String getDocumentId() {
+        return md.getDocumentId();
+    }
 
     /**
      * This sets a unique documentid for a given SectionDocument. Note that this id is
@@ -48,6 +56,32 @@ public interface SectionDocument {
      * @param documentid A unique id for this document
      * 
      */
-    public void setDocumentId(String documentid);
+    public void setDocumentId(String documentid) {
+        md.setDocumentId(documentid);
+    }
+
+    /**
+     * Set the <code>DocumentMetaData</code> for this SectionDocument.
+     * @param md
+     */
+    public void setDocumentMetaData (DocumentMetaData md) {
+        this.md = md;
+    }
+
+    /**
+     * Get the <code>DocumentMetaData</code> for this document.
+     * @return
+     */
+    public DocumentMetaData getDocumentMetaData (){
+        return md;
+    }
+
+    public hDataDocument getHDataDocument() {
+        return hdd;
+    }
+
+    public void setHDataDocument(hDataDocument hdd) {
+        this.hdd = hdd; 
+    }
 
 }

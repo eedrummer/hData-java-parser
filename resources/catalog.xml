@@ -17,7 +17,10 @@
    limitations under the License.
 
 -->
-<catalog xmlns="urn:oasis:names:rc:entity:xmlns:xml:catalog" prefer="system">
-    <!--<system systemId="http://mitre.org/hdata/core/2009/06/"
-        uri="../build/xsd-schemas/root.xsd"/> -->
+
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+     <system systemId="http://www.w3.org/2000/09/xmldsig#"
+            uri="xmldsig-core-schema.xsd"/>
+     <system systemId="http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd"
+            uri="xmldsig-core-schema.xsd"/>
 </catalog>

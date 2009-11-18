@@ -85,6 +85,11 @@ public class HRFFileSystemSerializer implements HRFSerializer {
             IOException th = new IOException();
             th.initCause(ex);
             throw th;
+        } catch (HRFSerialializationException ex) {
+            Logger.getLogger(HRFFileSystemSerializer.class.getName()).log(Level.SEVERE, null, ex);
+            IOException th = new IOException();
+            th.initCause(ex);
+            throw th;
         }
 
     }
@@ -269,7 +274,7 @@ public class HRFFileSystemSerializer implements HRFSerializer {
         }
     }
 
-    private void serializeSection(List<Section> sectionsList, File section) throws IOException, JAXBException {
+    private void serializeSection(List<Section> sectionsList, File section) throws IOException, HRFSerialializationException {
         for (Section i : sectionsList) {
             File secFile = new File(section, i.getPath());
             secFile.mkdir();

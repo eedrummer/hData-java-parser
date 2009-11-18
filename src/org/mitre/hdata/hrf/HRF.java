@@ -42,7 +42,7 @@ public abstract class HRF {
     /**
      * Version of this HRF implementation
      */
-    public static final String HRF_VERSION = "0.1";
+    public static final String HRF_VERSION = "0.8";
     /**
      * Identifier for Mandatory Extensions
      */

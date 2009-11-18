@@ -26,5 +26,5 @@
         <jxb:globalBindings>
             <jxb:serializable/>
         </jxb:globalBindings>
-    
+        
 </jxb:bindings>
