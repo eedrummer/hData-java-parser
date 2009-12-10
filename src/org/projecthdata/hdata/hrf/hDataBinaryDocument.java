@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.mitre.hdata.hrf;
+package org.projecthdata.hdata.hrf;
 
 /**
  *

@@ -15,21 +15,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mitre.hdata.hrf;
+package org.projecthdata.hdata.hrf;
 
 import java.io.OutputStream;
 import javax.xml.bind.JAXBException;
-import org.mitre.hdata.hrf.serialization.HRFSerialializationException;
+import org.projecthdata.hdata.hrf.serialization.HRFSerialializationException;
 import org.projecthdata.hdata.schemas._2009._11.metadata.DocumentMetaData;
 
 /**
  * Interface for objects that may be contained in a Section.
  * @author GBEUCHELT
  */
-public abstract class SectionDocument {
+public class SectionDocument {
 
     private DocumentMetaData md;
     private hDataDocument hdd;
+
+    public SectionDocument(DocumentMetaData metadata, hDataDocument hDataDocument) {
+        this.hdd = hDataDocument;
+        this.md = metadata;
+    }
 
     /**
      * Method to serialized the object into an OutputStream.

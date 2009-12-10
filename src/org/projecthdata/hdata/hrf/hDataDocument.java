@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 
-package org.mitre.hdata.hrf;
+package org.projecthdata.hdata.hrf;
 
 import java.io.OutputStream;
-import org.mitre.hdata.hrf.serialization.HRFSerialializationException;
+import org.projecthdata.hdata.hrf.serialization.HRFSerialializationException;
 
 /**
  *

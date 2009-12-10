@@ -15,13 +15,25 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mitre.hdata.hrf.serialization;
+package org.projecthdata.hdata.hrf.serialization;
 
-import org.mitre.hdata.hrf.ExtensionMissingException;
+import com.sun.syndication.feed.synd.SyndContent;
+import com.sun.syndication.feed.synd.SyndContentImpl;
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndEntryImpl;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedInput;
+import com.sun.syndication.io.SyndFeedOutput;
+import java.io.ByteArrayInputStream;
+import org.projecthdata.hdata.hrf.ExtensionMissingException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,14 +42,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import org.mitre.hdata.hrf.HRF;
-import org.mitre.hdata.hrf.HRFFactory;
-import org.mitre.hdata.hrf.Section;
-import org.mitre.hdata.hrf.SectionDocument;
-import org.mitre.hdata.hrf.SectionPathExistsException;
+import org.projecthdata.hdata.hrf.HRF;
+import org.projecthdata.hdata.hrf.HRFFactory;
+import org.projecthdata.hdata.hrf.Section;
+import org.projecthdata.hdata.hrf.SectionDocument;
+import org.projecthdata.hdata.hrf.SectionPathExistsException;
+import org.projecthdata.hdata.hrf.hDataDocument;
+import org.projecthdata.hdata.hrf.hDataXmlDocument;
+import org.projecthdata.hdata.hrf.util.MarshallUtil;
 import org.projecthdata.hdata.schemas._2009._06.core.Extensions;
 import org.projecthdata.hdata.schemas._2009._06.core.Sections;
+import org.projecthdata.hdata.schemas._2009._11.metadata.DocumentMetaData;
 
 /**
  *
@@ -151,14 +168,14 @@ public class HRFFileSystemSerializer implements HRFSerializer {
         // now we have a working HRF
 
         for (org.projecthdata.hdata.schemas._2009._06.core.Extension i : rootDoc.getExtensions().getExtension()) {
-            if (!this.registeredExtensions.keySet().contains(i.getContent())) {
+            if (!this.registeredExtensions.keySet().contains(i.getContentType())) {
                 if (i.getRequirement().equals(HRF.EXTENSION_REQUIREMENT_MANDATORY)) {
                     throw new ExtensionMissingException();
                 }
             }
 
             // needed to populate all internal lists
-            hrf.addExtension(i.getContent(), i.getRequirement());
+            hrf.addExtension(i.getContentType(), i.getRequirement());
 
         }
 
@@ -170,13 +187,29 @@ public class HRFFileSystemSerializer implements HRFSerializer {
 
             decentSection(i, "", hrf);
         }
-
         // all internal structures in the HRF should now be uptodate
 
-        
+        Unmarshaller mdu = JAXBContext.newInstance(DocumentMetaData.class).createUnmarshaller();
+
         for (File i : sections) {
             try {
                 File[] sectionContent = i.listFiles();
+
+                // read the section meta data
+                HashMap<String, DocumentMetaData> dmd = new HashMap<String, DocumentMetaData>();
+
+                SyndFeedInput input = new SyndFeedInput();
+                File atomFile = new File(i, "section.xml");
+                SyndFeed atomFeed = input.build(atomFile);
+
+                for (Object e : atomFeed.getEntries()) {
+
+                    String md = ((SyndContent) ((SyndEntry) e).getContents().iterator().next()).getValue();
+                    ByteArrayInputStream bais = new ByteArrayInputStream(md.getBytes());
+
+                    DocumentMetaData t = (DocumentMetaData) mdu.unmarshal(bais);
+                    dmd.put(t.getDocumentId(), t);
+                }
 
                 int pos = i.getCanonicalPath().replace("\\", "/").indexOf(location.getCanonicalPath().replace("\\", "/")) + location.getCanonicalPath().replace("\\", "/").length();
                 String secName = i.getCanonicalPath().replace("\\", "/").substring(pos);
@@ -184,40 +217,42 @@ public class HRFFileSystemSerializer implements HRFSerializer {
                 Section section = hrf.getSection(secName);
 
                 Class sectionClass = registeredExtensions.get(section.getUriTypeId().toString());
-                if (sectionClass != null) {
-                    JAXBContext ctx = JAXBContext.newInstance(sectionClass.getSuperclass());
 
+                Unmarshaller secu = null;
+                if (sectionClass != null) {
+                    secu = JAXBContext.newInstance(sectionClass).createUnmarshaller();
+                }
                     for (int j = 0; j < sectionContent.length; j++) {
-                        if (!sectionContent[j].isDirectory()) {
+                        if (!sectionContent[j].isDirectory() &&
+                                !sectionContent[j].getName().equals("section.xml")) {
+
 
                             // it's not a sub section
-                            
-                            Unmarshaller u = ctx.createUnmarshaller();
-                            
-                            Object o = u.unmarshal(sectionContent[j]);
-                            SectionDocument doc = null;
+                            hDataDocument hdd = null;
 
+                            // docID through the filename - .xml
+                            String docName = sectionContent[j].getName().substring(0, sectionContent[j].getName().length()-4);
 
-                            Class[] params = {sectionClass.getSuperclass()};
-                            try {
-                                Constructor<?> constructor = sectionClass.getConstructor(params);
-                                doc = (SectionDocument) constructor.newInstance(o);
-
-                            } catch (Exception ex) {
-                                Logger.getLogger(HRFFileSystemSerializer.class.getName()).log(Level.SEVERE, null, ex);
-                                // better find a more suitable exception
-                                throw new ExtensionMissingException();
+                            if (dmd.get(docName).getContentType()==null ) {
+                                hdd = new hDataXmlDocument(secu.unmarshal(sectionContent[j])); 
+                            } else {
+                                if (dmd.get(docName).getMediaType().equals("application/xml")) {
+                                
+                                    Unmarshaller u = JAXBContext.newInstance(registeredExtensions.get(dmd.get(docName).getContentType())).createUnmarshaller();
+                                    hdd = new hDataXmlDocument(u.unmarshal(sectionContent[j])); 
+                                } else {
+                                    //TODO: Binary deserialization
+                                }
                             }
-
-                            String rawid = sectionContent[j].getName();
-
-                            doc.setDocumentId(rawid.substring(0, rawid.length() -4)); 
+                            
+                            
+                            SectionDocument doc = new SectionDocument(dmd.get(docName), hdd);
 
                             section.addSectionDocument(doc);
 
                         }
                     }
-                }
+                
             } catch (JAXBException ex) {
                 Logger.getLogger(HRFFileSystemSerializer.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -278,12 +313,59 @@ public class HRFFileSystemSerializer implements HRFSerializer {
         for (Section i : sectionsList) {
             File secFile = new File(section, i.getPath());
             secFile.mkdir();
+
+            SyndFeed sectionAtomFeed = new SyndFeedImpl();
+            sectionAtomFeed.setFeedType("atom_1.0");
+
+            List<SyndEntry> entries = new ArrayList<SyndEntry>();
+            
             for (SectionDocument sd : i.getDocuments().values()) {
+
                 File docFile = new File(secFile, sd.getDocumentId() + ".xml");
                 docFile.createNewFile();
                 FileOutputStream fosDoc = new FileOutputStream(docFile);
                 fosDoc.write(((ByteArrayOutputStream) sd.marshall()).toByteArray());
                 fosDoc.close();
+
+                SyndContent content = new SyndContentImpl();
+                content.setType("application/xml");
+                try {
+
+                    ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+                    JAXBContext ctx = JAXBContext.newInstance(DocumentMetaData.class);
+                    Marshaller m = ctx.createMarshaller();
+                    m.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+
+                    m.marshal(sd.getDocumentMetaData(), os);
+
+                    content.setValue(os.toString());
+                } catch (JAXBException ex) {
+                    Logger.getLogger(HRFFileSystemSerializer.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new HRFSerialializationException(ex);
+                }
+
+                List<SyndContent> contentList = new ArrayList<SyndContent>();
+                contentList.add(content);
+
+                SyndEntry entry = new SyndEntryImpl();
+                entry.setTitle(sd.getDocumentId());
+                entry.setContents(contentList);
+
+                entries.add(entry);
+
+            }
+
+            sectionAtomFeed.setEntries(entries);
+            File sectionAtom = new File(secFile, "section.xml");
+            sectionAtom.createNewFile();
+            SyndFeedOutput atomOut = new SyndFeedOutput();
+            Writer atomWriter = new FileWriter(sectionAtom);
+            try {
+                atomOut.output(sectionAtomFeed, atomWriter);
+            } catch (FeedException ex) {
+                Logger.getLogger(HRFFileSystemSerializer.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IOException(ex); 
             }
 
             serializeSection(i.getSections(), secFile);

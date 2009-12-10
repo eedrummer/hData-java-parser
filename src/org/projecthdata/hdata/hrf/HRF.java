@@ -15,7 +15,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mitre.hdata.hrf;
+package org.projecthdata.hdata.hrf;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -26,7 +26,7 @@ import java.util.StringTokenizer;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import org.mitre.hdata.hrf.util.DeepCopy;
+import org.projecthdata.hdata.hrf.util.DeepCopy;
 import org.projecthdata.hdata.schemas._2009._06.core.Extension;
 import org.projecthdata.hdata.schemas._2009._06.core.Root;
 import org.projecthdata.hdata.schemas._2009._06.core.Sections;
@@ -76,7 +76,7 @@ public abstract class HRF {
             if (!extensionMap.containsKey(typeid)) {
                 e = new Extension();
 
-                e.setContent(typeid);
+                e.setContentType(typeid);
                 e.setRequirement(requirement);
 
                 extensionMap.put(typeid, e);
@@ -119,7 +119,7 @@ public abstract class HRF {
      * @return True if the Extension was registered and removed, false otherwise.
      */
     public boolean removeExtension(Extension extension) {
-        return root.getExtensions().getExtension().remove(extensionMap.remove(extension.getContent()));
+        return root.getExtensions().getExtension().remove(extensionMap.remove(extension.getContentType()));
 
     }
 
@@ -308,7 +308,7 @@ public abstract class HRF {
 
         boolean sectionInExtensionList = false;
         for (Extension i : root.getExtensions().getExtension()) {
-            if (i.getContent().equals(section.getTypeId())) {
+            if (i.getContentType().equals(section.getTypeId())) {
                 sectionInExtensionList = true;
             }
         }

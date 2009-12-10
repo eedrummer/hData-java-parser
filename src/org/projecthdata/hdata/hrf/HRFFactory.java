@@ -15,7 +15,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mitre.hdata.hrf;
+package org.projecthdata.hdata.hrf;
 
 
 import java.util.GregorianCalendar;
