@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Properties;
-import org.projecthdata.hdata.hrf.serialization.HRFFileSystemSerializer;
+import org.projecthdata.hdata.hrf.serialization.HRFSerializer;
 
 /**
  *
@@ -32,7 +32,7 @@ public class hDataContentResolver {
         return map.get(clazz); 
     }
 
-    public void registerExtension(HRFFileSystemSerializer fss) {
+    public void registerExtension(HRFSerializer fss) {
         for (Entry<Class,URI> e : map.entrySet()) {
             fss.registerExtension(e.getValue().toString(), e.getKey());
         }

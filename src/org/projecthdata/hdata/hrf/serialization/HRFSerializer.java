@@ -25,14 +25,12 @@ import org.projecthdata.hdata.hrf.HRF;
  */
 public interface HRFSerializer {
 
-    HRF deserialize(Object o) throws Exception;
+    public abstract HRF deserialize(Object o) throws Exception;
 
-    void serialize(Object o, HRF hrf) throws Exception;
+    public abstract void serialize(Object o, HRF hrf) throws Exception;
     
-    void registerExtension(String uri, Class clazz);
+    public void registerExtension(String uri, Class clazz);
 
     public Class resolveExtension(String uri);
-
-    
 
 }

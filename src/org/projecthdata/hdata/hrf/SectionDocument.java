@@ -18,6 +18,7 @@
 package org.projecthdata.hdata.hrf;
 
 import java.io.OutputStream;
+import java.io.Serializable;
 import javax.xml.bind.JAXBException;
 import org.projecthdata.hdata.hrf.serialization.HRFSerialializationException;
 import org.projecthdata.hdata.schemas._2009._11.metadata.DocumentMetaData;
@@ -26,7 +27,7 @@ import org.projecthdata.hdata.schemas._2009._11.metadata.DocumentMetaData;
  * Interface for objects that may be contained in a Section.
  * @author GBEUCHELT
  */
-public class SectionDocument {
+public class SectionDocument implements Serializable {
 
     private DocumentMetaData md;
     private hDataDocument hdd;
