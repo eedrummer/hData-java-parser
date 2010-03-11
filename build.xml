@@ -1,41 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="hData-core" default="default" basedir=".">
-    <description>Builds, tests, and runs the project hData-core.</description>
+<project name="hData-java-parser" default="get-schemas" basedir=".">
+    <description>Creates JAXB classes for hData schemas and provides some code to work with the hData RESTful Network Transport</description>
 
-    <property name="tools.dir" value="resources/tools" />
-    <property name="ant.contrib.jar" value="${tools.dir}/ant-contrib-0.6.jar" />
-
-    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
-        <classpath>
-            <pathelement location="${ant.contrib.jar}"/>
-        </classpath>
-    </taskdef>
-
-    <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" >
-        <classpath>
-            <fileset dir="lib/jaxb" includes="**/*.jar"/>
-        </classpath>
-    </taskdef>
-
-    <import file="nbproject/build-impl.xml"/>
-
-    <target name="-pre-compile">
-        <outofdate>
-            <sourcefiles />
-            <targetfiles path="build/gen-src/">
-            </targetfiles>
-            <sequential>
-                <echo message="Compiling the XSD schemas..."/>
-                <mkdir dir="build/gen-src"/>
-                <xjc binding="resources/binding.xml" catalog="resources/catalog.xml" destDir="build/gen-src">
-                    <arg value="-extension"/>
-                    <schema dir="../hData/schemas/2009">
-                        <include name="06/root.xsd"/>
-                        <include name="11/section_metadata.xsd"/>
-                    </schema>
-                </xjc>
-            </sequential>
-        </outofdate>
+    <target name="get-schemas" depends="check-schemas" unless="schemas.present">
+        <mkdir dir="downloads"/>
+        <get src="http://github.com/projecthdata/hData/tarball/master" dest="downloads/schemas.tar.gz"/>
+        <untar src="downloads/schemas.tar.gz" compression="gzip" dest="downloads">
+            <!-- This is needed to clean up the first 6 chars of the SHA1 of the commit
+                 used to make the tarball -->
+            <regexpmapper from="projecthdata-hData-\w+/(.*)" to="\1"/>
+        </untar>
+    </target>
+    
+    <target name="check-schemas">
+        <available file="downloads/schemas.tar.gz" property="schemas.present"/>
+    </target>
+    
+    <target name="generate-jaxb-code" depends="get-schemas">
+        <mkdir dir="gen-src"/>
+        <exec executable="xjc">
+            <arg value="-d"/>
+            <arg value="gen-src"/>
+            <arg value="downloads/schemas/2009/06"/>
+         </exec>
+    </target>
+    
+    <target name="clean">
+        <delete dir="gen-src"/>
+        <delete dir="downloads"/>
     </target>
 </project>
