@@ -50,16 +50,17 @@
         <exec executable="xjc">
             <arg value="-d"/>
             <arg value="gen-src"/>
-            <arg value="downloads/schemas/2009/06"/>
+            <arg value="downloads/schemas"/>
          </exec>
     </target>
     
     <target name="clean">
         <delete dir="gen-src"/>
         <delete dir="downloads"/>
+        <delete dir="classes"/>
     </target>
     
-    <target name="compile" depends="init-ivy, generate-jaxb-code">
+    <target name="compile" depends="init-ivy,generate-jaxb-code">
         <mkdir dir="classes"/>
         <javac srcdir="gen-src:src" destdir="classes">
             <classpath>
