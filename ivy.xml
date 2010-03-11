@@ -3,5 +3,8 @@
     <dependencies>
         <dependency org="com.sun.jersey" name="jersey-core" rev="1.1.5.1"/>
         <dependency org="com.sun.jersey" name="jersey-atom" rev="1.1.5.1"/>
+        <dependency org="com.sun.jersey" name="jersey-client" rev="1.1.5.1"/>
+        <dependency org="com.sun.jersey.contribs" name="jersey-multipart" rev="1.1.5.1" transitive="false"/>
+        <dependency org="com.sun.jersey" name="jersey-server" rev="1.1.5.1" transitive="false"/>
     </dependencies>
 </ivy-module>
