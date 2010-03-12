@@ -23,7 +23,13 @@ package org.projecthdata.hdata.hrf;
  */
 public class ExtensionMissingException extends Exception {
 
-    /**
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2978297922438544979L;
+
+
+	/**
      * Creates a new instance of <code>ExtensionMissingException</code> without detail message.
      */
     public ExtensionMissingException() {

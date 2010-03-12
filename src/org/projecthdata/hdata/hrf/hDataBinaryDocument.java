@@ -11,4 +11,9 @@ package org.projecthdata.hdata.hrf;
  */
 public abstract class hDataBinaryDocument extends hDataDocument {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7780280978919501759L;
+
 }

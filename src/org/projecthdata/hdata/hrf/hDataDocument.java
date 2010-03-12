@@ -15,6 +15,11 @@ import org.projecthdata.hdata.hrf.serialization.HRFSerialializationException;
  */
 public abstract class hDataDocument implements Serializable {
 
-    public abstract OutputStream marshall() throws HRFSerialializationException;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5587270422383125298L;
+
+	public abstract OutputStream marshall() throws HRFSerialializationException;
 
 }

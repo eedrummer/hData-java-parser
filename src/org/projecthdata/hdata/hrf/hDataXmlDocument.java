@@ -18,7 +18,12 @@ import org.projecthdata.hdata.hrf.util.MarshallUtil;
  */
 public class hDataXmlDocument extends hDataDocument {
 
-    Object document;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6277582709142299011L;
+
+	Object document;
 
     public hDataXmlDocument(Object document) {
         this.document = document;

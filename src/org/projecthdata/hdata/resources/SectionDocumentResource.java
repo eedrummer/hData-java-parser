@@ -26,8 +26,6 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -45,7 +43,6 @@ import org.projecthdata.hdata.resources.utils.ModifyHandleHelper;
 public class SectionDocumentResource extends AbstractResource {
 
     private final String documentid;
-    private final String sectionPath;
     private final Section section;
     private final SectionResource parentResource;
     private final HRF hrf;
@@ -57,7 +54,6 @@ public class SectionDocumentResource extends AbstractResource {
 
         this.hrf = hrf;
         this.documentid = documentid;
-        this.sectionPath = sectionPath;
         this.section = hrf.getSection(sectionPath);
         this.parentResource = parentResource;
 
