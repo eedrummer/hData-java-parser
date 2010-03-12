@@ -53,17 +53,21 @@ import org.projecthdata.hdata.schemas._2009._11.metadata.DocumentMetaData;
  */
 public class HRFFileSystemSerializer implements HRFSerializer {
 
-    HashMap<String, Class> registeredExtensions;
+    @SuppressWarnings("unchecked")
+	private HashMap<String, Class> registeredExtensions;
 
-    public HRFFileSystemSerializer() {
+    @SuppressWarnings("unchecked")
+	public HRFFileSystemSerializer() {
         registeredExtensions = new HashMap<String, Class>();
     }
 
-    public void registerExtension(String uri, Class clazz) {
+    @SuppressWarnings("unchecked")
+	public void registerExtension(String uri, Class clazz) {
         registeredExtensions.put(uri, clazz);
     }
 
-    public Class resolveExtension(String uri) {
+    @SuppressWarnings("unchecked")
+	public Class resolveExtension(String uri) {
         return registeredExtensions.get(uri);
     }
 
@@ -117,7 +121,8 @@ public class HRFFileSystemSerializer implements HRFSerializer {
         return this.deserialize((File) o);
     }
 
-    public HRF deserialize(File location) throws IOException, ExtensionMissingException, HRFSerialializationException {
+    @SuppressWarnings("unchecked")
+	public HRF deserialize(File location) throws IOException, ExtensionMissingException, HRFSerialializationException {
 
         try {
             HRF hrf = null;

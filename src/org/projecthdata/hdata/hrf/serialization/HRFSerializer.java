@@ -29,8 +29,10 @@ public interface HRFSerializer {
 
     public abstract void serialize(Object o, HRF hrf) throws Exception;
     
-    public void registerExtension(String uri, Class clazz);
+    @SuppressWarnings("unchecked")
+	public void registerExtension(String uri, Class clazz);
 
-    public Class resolveExtension(String uri);
+    @SuppressWarnings("unchecked")
+	public Class resolveExtension(String uri);
 
 }

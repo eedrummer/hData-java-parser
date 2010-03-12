@@ -64,14 +64,13 @@ public class SectionResource extends AbstractResource {
     private final HRF hrf;
     private final String sectionPath;
     private final Section section;
-    private final AbstractResource parentResource;
+    
     @Context
     private ResourceConfig rc;
 
-    public SectionResource(HRF hrf, String sectionPath, AbstractResource parentResource) {
+    public SectionResource(HRF hrf, String sectionPath) {
         this.hrf = hrf;
         this.sectionPath = sectionPath;
-        this.parentResource = parentResource;
 
         section = hrf.getSection(sectionPath);
     }
@@ -227,7 +226,7 @@ public class SectionResource extends AbstractResource {
         if (!abstractid.endsWith(".xml")) {
             for (Section i : section.getSections()) {
                 if (i.getPath().equals(abstractid)) {
-                    return new SectionResource(hrf, sectionPath + "/" + abstractid, this);
+                    return new SectionResource(hrf, sectionPath + "/" + abstractid);
                 }
             }
             throw new HttpNotFoundException("There is no child section with path /" + sectionPath + "/" + abstractid);

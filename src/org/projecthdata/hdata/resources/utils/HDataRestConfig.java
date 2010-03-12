@@ -34,7 +34,8 @@ public class HDataRestConfig {
     private final HRFSerializer serializer;
     private final UpdateNotifier notifier;
 
-    private HDataRestConfig(ResourceConfig rc) throws Exception {
+    @SuppressWarnings("unchecked")
+	private HDataRestConfig(ResourceConfig rc) throws Exception {
 
         //TODO: the invocation of provided serializers and notifiers should be much more flexible
 
@@ -102,11 +103,13 @@ public class HDataRestConfig {
         return notifier;
     }
 
-    public void registerExtension(String uri, Class clazz) {
+    @SuppressWarnings("unchecked")
+	public void registerExtension(String uri, Class clazz) {
         getSerializer().registerExtension(uri, clazz);
     }
 
-    public Class resolveExtension(String uri) {
+    @SuppressWarnings("unchecked")
+	public Class resolveExtension(String uri) {
 
         return getSerializer().resolveExtension(uri);
     }

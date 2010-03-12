@@ -26,6 +26,11 @@ import org.projecthdata.hdata.hrf.HRFException;
 public class HRFSerialializationException extends HRFException {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2053786472670237403L;
+
+	/**
      * Creates a new instance of <code>HRFSerialializationException</code> without detail message.
      */
     public HRFSerialializationException() {

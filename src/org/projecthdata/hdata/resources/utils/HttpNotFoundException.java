@@ -26,6 +26,11 @@ import javax.ws.rs.core.Response;
 public class HttpNotFoundException extends WebApplicationException {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8867352599560252930L;
+
+	/**
      * Create a HTTP 404 (Not Found) exception.
      */
     public HttpNotFoundException() {

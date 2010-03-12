@@ -29,7 +29,11 @@ import org.projecthdata.hdata.schemas._2009._11.metadata.DocumentMetaData;
  */
 public class SectionDocument implements Serializable {
 
-    private DocumentMetaData md;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3339088490453768543L;
+	private DocumentMetaData md;
     private hDataDocument hdd;
 
     public SectionDocument(DocumentMetaData metadata, hDataDocument hDataDocument) {

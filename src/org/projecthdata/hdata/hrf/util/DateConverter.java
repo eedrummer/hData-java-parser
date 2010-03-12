@@ -17,7 +17,6 @@
  */
 package org.projecthdata.hdata.hrf.util;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;

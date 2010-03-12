@@ -57,7 +57,8 @@ public class Section extends org.projecthdata.hdata.schemas._2009._06.core.Secti
      * Returns a shallow copy of the HashMap containing the SectionDocuments of this Section.
      * @return Copy of the HashMap of all SectionDocuments.
      */
-    public HashMap<String, SectionDocument> getDocuments() {
+    @SuppressWarnings("unchecked")
+	public Map<String, SectionDocument> getDocuments() {
         return (HashMap<String, SectionDocument>) objects.clone();
     }
 
@@ -99,13 +100,6 @@ public class Section extends org.projecthdata.hdata.schemas._2009._06.core.Secti
         this.setTypeId(typeid.toString());
     }
 
-    @Override
-    @Deprecated
-    public void setTypeId(String value) {
-        super.setTypeId(value);
-    }
-
-
     /**
      * Convenience method that returns a TypeID for this section in the form of an URI.
      * Use of the String counterparts is highly discouraged.
@@ -120,14 +114,6 @@ public class Section extends org.projecthdata.hdata.schemas._2009._06.core.Secti
         }
     }
 
-    @Override
-    @Deprecated
-    public String getTypeId() {
-        return super.getTypeId();
-    }
-
-
-
     /**
      * Sets the path segment for this Section. Note that no namespace deconfliction
      * is provided at this time: Developers must ensure that Sections are uniquely named.
@@ -141,15 +127,6 @@ public class Section extends org.projecthdata.hdata.schemas._2009._06.core.Secti
         }
         super.setPath(path);
         
-    }
-
-    /**
-     * Returns the path segment of this Section.
-     * @return
-     */
-    @Override
-    public String getPath() {
-        return super.getPath();
     }
 
     /**

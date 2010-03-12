@@ -18,9 +18,11 @@ import org.projecthdata.hdata.hrf.serialization.HRFSerializer;
  */
 public class hDataContentResolver {
 
-    private final HashMap<Class, URI> map;
+    @SuppressWarnings("unchecked")
+	private final HashMap<Class, URI> map;
 
-    public hDataContentResolver(Properties configuration) throws ClassNotFoundException, URISyntaxException {
+    @SuppressWarnings("unchecked")
+	public hDataContentResolver(Properties configuration) throws ClassNotFoundException, URISyntaxException {
         map = new HashMap<Class, URI>();
 
         for (Entry e : configuration.entrySet()) {
@@ -28,11 +30,13 @@ public class hDataContentResolver {
         }
     }
 
-    public URI getNamespace(Class clazz) {
+    @SuppressWarnings("unchecked")
+	public URI getNamespace(Class clazz) {
         return map.get(clazz); 
     }
 
-    public void registerExtension(HRFSerializer fss) {
+    @SuppressWarnings("unchecked")
+	public void registerExtension(HRFSerializer fss) {
         for (Entry<Class,URI> e : map.entrySet()) {
             fss.registerExtension(e.getValue().toString(), e.getKey());
         }

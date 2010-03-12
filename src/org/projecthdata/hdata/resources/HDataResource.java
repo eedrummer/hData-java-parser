@@ -246,7 +246,7 @@ public class HDataResource extends AbstractResource {
         } else {
             for (Section i : hrf.getRootSections()) {
                 if (i.getPath().equals(sectionid)) {
-                    return new SectionResource(hrf, "/" + sectionid, this);
+                    return new SectionResource(hrf, "/" + sectionid);
                 }
             }
 

@@ -29,7 +29,8 @@ import javax.xml.bind.Marshaller;
  */
 public class MarshallUtil {
 
-    public static OutputStream marshall(Object obj, Class klass) throws JAXBException {
+    @SuppressWarnings("unchecked")
+	public static OutputStream marshall(Object obj, Class klass) throws JAXBException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         JAXBContext ctx = JAXBContext.newInstance(klass);

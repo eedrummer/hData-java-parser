@@ -123,7 +123,8 @@ public abstract class ModifyHandleHelper {
 
     }
 
-    public static Response handleDocument(HRF hrf, Class clazz, DocumentMetaData metadata, InputStream data, Section section, UriInfo uriInfo, boolean update) {
+    @SuppressWarnings("unchecked")
+	public static Response handleDocument(HRF hrf, Class clazz, DocumentMetaData metadata, InputStream data, Section section, UriInfo uriInfo, boolean update) {
         Response result = Response.status(Response.Status.BAD_REQUEST).build();
 
         if (metadata.getMediaType().equals(MediaType.APPLICATION_XML)) {

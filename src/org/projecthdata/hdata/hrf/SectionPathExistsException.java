@@ -24,6 +24,12 @@ package org.projecthdata.hdata.hrf;
 public class SectionPathExistsException extends Exception {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5446752604234283928L;
+
+
+	/**
      * Creates a new instance of <code>SectionPathExistsException</code> without detail message.
      */
     public SectionPathExistsException() {

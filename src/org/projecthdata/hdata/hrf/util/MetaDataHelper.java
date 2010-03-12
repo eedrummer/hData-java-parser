@@ -121,7 +121,8 @@ public class MetaDataHelper {
         return result;
     }
 
-    public static HashMap<String, DocumentMetaData> parseFeed(SyndFeed feed) throws HRFException {
+    @SuppressWarnings("unchecked")
+	public static HashMap<String, DocumentMetaData> parseFeed(SyndFeed feed) throws HRFException {
         HashMap<String, DocumentMetaData> result = new HashMap<String, DocumentMetaData>();
 
         for (Object e : feed.getEntries()) {

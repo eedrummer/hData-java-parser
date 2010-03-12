@@ -24,6 +24,11 @@ package org.projecthdata.hdata.hrf;
 public class HRFException extends Exception {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 850861132715224345L;
+
+	/**
      * Creates a new instance of <code>HRFException</code> without detail message.
      */
     public HRFException() {
