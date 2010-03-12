@@ -45,7 +45,11 @@
         <available file="downloads/schemas.tar.gz" property="schemas.present"/>
     </target>
     
-    <target name="generate-jaxb-code" depends="get-schemas">
+    <target name="check-generated-code">
+        <available file="gen-src" property="code.present"/>
+    </target>
+    
+    <target name="generate-jaxb-code" depends="get-schemas,check-generated-code" unless="code.present">
         <mkdir dir="gen-src"/>
         <exec executable="xjc">
             <arg value="-d"/>
@@ -58,6 +62,7 @@
         <delete dir="gen-src"/>
         <delete dir="downloads"/>
         <delete dir="classes"/>
+        <delete dir="dist"/>
     </target>
     
     <target name="compile" depends="init-ivy,generate-jaxb-code">
@@ -74,5 +79,11 @@
     <target name="get-deps" depends="init-ivy" description="retrieve dependencies with ivy">
         <ivy:configure file="ivysettings.xml" />
         <ivy:retrieve />
+    </target>
+    
+    <target name="jar" depends="compile">
+        <mkdir dir="dist"/>
+        <jar destfile="dist/hData.jar"
+             basedir="classes"/>
     </target>
 </project>
