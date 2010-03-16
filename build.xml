@@ -67,7 +67,7 @@
     
     <target name="compile" depends="init-ivy,generate-jaxb-code">
         <mkdir dir="classes"/>
-        <javac srcdir="gen-src:src" destdir="classes">
+        <javac srcdir="gen-src:src/java" destdir="classes">
             <classpath>
                 <fileset dir="lib">
                     <include name="**/*.jar"/>
