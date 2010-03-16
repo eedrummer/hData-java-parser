@@ -2,3 +2,6 @@ downloads*
 gen-src*
 classes*
 lib*
+.project
+.classpath
+dist*
