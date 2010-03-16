@@ -86,4 +86,17 @@
         <jar destfile="dist/hData.jar"
              basedir="classes"/>
     </target>
+    
+    <target name="war" depends="compile">
+        <mkdir dir="dist"/>
+        <war destfile="dist/hData-REST.war" webxml="src/web/WEB-INF/web.xml">
+            <fileset dir="src/web">
+                <include name="**/*.jsp"/>
+            </fileset>
+            <lib dir="lib">
+                <include name="**/*.jar"/>
+            </lib>
+            <classes dir="classes"/>
+        </war>
+    </target>
 </project>
