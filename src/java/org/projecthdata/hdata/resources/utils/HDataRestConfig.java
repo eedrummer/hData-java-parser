@@ -69,7 +69,9 @@ public class HDataRestConfig {
         Properties props = new java.util.Properties();
         props.load(in);
 
-        hDataContentResolver cr = new hDataContentResolver(props);
+        hDataContentResolver cr = new hDataContentResolver();
+
+        cr.loadExtensionsFromProperties(props); 
 
         cr.registerExtension(serializer);
 
