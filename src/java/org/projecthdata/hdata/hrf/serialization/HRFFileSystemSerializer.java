@@ -156,7 +156,7 @@ public class HRFFileSystemSerializer implements HRFSerializer {
                 org.projecthdata.hdata.schemas._2009._06.core.Root hrfRoot = new org.projecthdata.hdata.schemas._2009._06.core.Root();
 
                 hrfRoot.setCreated(rootDoc.getCreated());
-                hrfRoot.setDocumentId(rootDoc.getDocumentId());
+                hrfRoot.setId(rootDoc.getId());
                 hrfRoot.setLastModified(rootDoc.getLastModified());
                 hrfRoot.setVersion(rootDoc.getVersion());
                 hrfRoot.setSections(new Sections());
@@ -172,14 +172,10 @@ public class HRFFileSystemSerializer implements HRFSerializer {
             // now we have a working HRF
 
             for (org.projecthdata.hdata.schemas._2009._06.core.Extension i : rootDoc.getExtensions().getExtension()) {
-                if (!this.registeredExtensions.keySet().contains(i.getContentType())) {
-                    if (i.getRequirement().equals(HRF.EXTENSION_REQUIREMENT_MANDATORY)) {
-                        throw new ExtensionMissingException();
-                    }
-                }
+                
 
                 // needed to populate all internal lists
-                hrf.addExtension(i.getContentType(), i.getRequirement());
+                hrf.addExtension(i.getContent(), i.getContentType());
 
             }
 
@@ -265,7 +261,7 @@ public class HRFFileSystemSerializer implements HRFSerializer {
         // deprecated
         //s.setClazz(i.getClazz());
         s.setName(i.getName());
-        s.setTypeId(i.getTypeId());
+        s.setExtensionId(i.getExtensionId());
         s.setPath(i.getPath());
         return s;
     }

@@ -15,14 +15,24 @@
  */
 package org.projecthdata.hdata.resources.utils;
 
+import com.google.common.base.Predicate;
 import com.sun.jersey.api.core.ResourceConfig;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBIntrospector;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.projecthdata.hdata.hrf.serialization.HRFFileSystemSerializer;
 import org.projecthdata.hdata.hrf.serialization.HRFSerializer;
 import org.projecthdata.hdata.hrf.util.hDataContentResolver;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 
 /**
  *
@@ -58,20 +68,9 @@ public class HDataRestConfig {
 
         }
 
-        String propertiesFile = "org/projecthdata/hdata/buildingblocks/ccd.properties";
-
-
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream(propertiesFile);
-        if (in == null) {
-            throw new FileNotFoundException();
-        }
-
-        Properties props = new java.util.Properties();
-        props.load(in);
-
         hDataContentResolver cr = new hDataContentResolver();
 
-        cr.loadExtensionsFromProperties(props); 
+        cr.scanClassPath("org.projecthdata.hdata.schemas");
 
         cr.registerExtension(serializer);
 

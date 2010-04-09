@@ -70,7 +70,7 @@ public class HRFFactory {
             try {
                 root = new Root();
                 root.setCreated(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
-                root.setDocumentId(UUID.randomUUID().toString());
+                root.setId(UUID.randomUUID().toString());
                 root.setLastModified(root.getCreated());
                 root.setVersion(HRF.HRF_VERSION);
                 root.setSections(new Sections());

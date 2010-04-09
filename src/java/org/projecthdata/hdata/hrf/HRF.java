@@ -69,27 +69,16 @@ public abstract class HRF {
      * @return null, if no extension was created, or a reference to the Extension that was registered.
      * If the same Extension-identified by the typeid-was registered before, no new Extension will be added.
      */
-    public Extension addExtension(String typeid, String requirement) {
+    public Extension addExtension(String extensionId, String contentType) {
 
         Extension e = null;
-        if (requirement.equals(EXTENSION_REQUIREMENT_MANDATORY) || requirement.equals(EXTENSION_REQUIREMENT_OPTIONAL)) {
-            if (!extensionMap.containsKey(typeid)) {
-                e = new Extension();
+        e = new Extension();
 
-                e.setContentType(typeid);
-                e.setRequirement(requirement);
+        e.setContent(extensionId);
+        e.setContentType(contentType);
 
-                extensionMap.put(typeid, e);
-                root.getExtensions().getExtension().add(e);
-            } else {
-                Extension existingExtension = extensionMap.get(typeid);
-                if (existingExtension.getRequirement().equals(EXTENSION_REQUIREMENT_OPTIONAL)) {
-                    existingExtension.setRequirement(requirement);
-                }
-
-                e = existingExtension;
-            }
-        }
+        extensionMap.put(extensionId, e);
+        root.getExtensions().getExtension().add(e);
 
         return e;
     }
@@ -99,8 +88,8 @@ public abstract class HRF {
      * @param typeid A URN string identifying the Extension
      * @return The registered Extension, or null if no Extension with typeid was registered.
      */
-    public Extension getExtension(String typeid) {
-        return extensionMap.get(typeid);
+    public Extension getExtension(String extensionId) {
+        return extensionMap.get(extensionId);
     }
 
     /**
@@ -111,15 +100,13 @@ public abstract class HRF {
         return root.getExtensions().getExtension();
     }
 
-    
-
     /**
      * Remove a registered Extension.
      * @param extension A reference to the Extension that need to be removed.
      * @return True if the Extension was registered and removed, false otherwise.
      */
     public boolean removeExtension(Extension extension) {
-        return root.getExtensions().getExtension().remove(extensionMap.remove(extension.getContentType()));
+        return root.getExtensions().getExtension().remove(extensionMap.remove(extension.getContent()));
 
     }
 
@@ -165,16 +152,16 @@ public abstract class HRF {
             if (!root.getSections().getSection().contains(section)) {
                 // sanity checking - idempotency
                 for (org.projecthdata.hdata.schemas._2009._06.core.Section i : getRootSections()) {
-                if (i.getPath().equals(section.getPath())) {
-                    if (i.getTypeId().equals(section.getUriTypeId().toString())) {
-                        return getRootSections().get(getRootSections().indexOf(section)).getPath();
-                    } else {
-                        throw new SectionPathExistsException(); 
+                    if (i.getPath().equals(section.getPath())) {
+                        if (i.getExtensionId().equals(section.getUriTypeId().toString())) {
+                            return getRootSections().get(getRootSections().indexOf(section)).getPath();
+                        } else {
+                            throw new SectionPathExistsException();
+                        }
                     }
                 }
-            }
-                
-                
+
+
                 root.getSections().getSection().add(section);
 
             }
@@ -265,7 +252,6 @@ public abstract class HRF {
         return result;
     }
 
-
     /**
      * Access to the paths for all registered Sections. These are the full paths, including
      * all path segments for the Sections' ancestors.
@@ -298,7 +284,7 @@ public abstract class HRF {
         if (sectionPaths.contains(checkpath + section.getPath())) {
             // see if the section already exists
             Section child = findSection(this.getRootSections(), section.getPath());
-            if (!child.getTypeId().equals(section.getTypeId())) {
+            if (!child.getExtensionId().equals(section.getExtensionId())) {
                 return true;
             }
             // get rid of the previously registered section - this way we
@@ -308,12 +294,12 @@ public abstract class HRF {
 
         boolean sectionInExtensionList = false;
         for (Extension i : root.getExtensions().getExtension()) {
-            if (i.getContentType().equals(section.getTypeId())) {
+            if (i.getContent().equals(section.getExtensionId())) {
                 sectionInExtensionList = true;
             }
         }
         if (!sectionInExtensionList) {
-            addExtension(section.getTypeId(), EXTENSION_REQUIREMENT_MANDATORY);
+            addExtension(section.getExtensionId(), section.getExtensionId());
         }
 
         return false;

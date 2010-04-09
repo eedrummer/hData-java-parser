@@ -129,7 +129,7 @@ public class HDataResource extends AbstractResource {
             result.setFeedType("atom_1.0");
             List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
-            result.setTitle("Subsection feed for HRF " + hrf.getRoot().getDocumentId());
+            result.setTitle("Subsection feed for HRF " + hrf.getRoot().getId());
             result.setLink(uriInfo.getAbsolutePath().toString());
 
 
@@ -201,7 +201,7 @@ public class HDataResource extends AbstractResource {
 
         } else if (type.equals("extension")) {
 
-            result = ModifyHandleHelper.handleExtension(hrf, requirement, typeId, uriInfo);
+            result = ModifyHandleHelper.handleExtension(hrf, typeId, uriInfo);
             try {
                 notifyChange(hrf);
             } catch (Exception ex) {

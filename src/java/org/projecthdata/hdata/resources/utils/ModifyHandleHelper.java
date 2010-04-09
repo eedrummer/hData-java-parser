@@ -94,29 +94,20 @@ public abstract class ModifyHandleHelper {
         return result;
     }
 
-    public static Response handleExtension(HRF hrf, String requirement, String typeId, UriInfo uriInfo) {
+    public static Response handleExtension(HRF hrf, String extensionId, UriInfo uriInfo) {
 
         Response result = null;
-        if (requirement == null || !(requirement.equals("optional") || requirement.equals("mandatory"))) {
-            return result;
-        }
-
+        
         Extension regExt = null;
         for (Extension e : hrf.getExtensions()) {
-            if (e.getContentType().equals(typeId)) {
+            if (e.getContent().equals(extensionId)) {
                 regExt = e;
                 break;
             }
         }
-        if (regExt != null) {
-            if (regExt.getRequirement().equals(requirement)) {
-                if (regExt.getRequirement().equals("mandatory") && requirement.equals("optional")) {
-                    return Response.status(Response.Status.CONFLICT).build();
-                }
-            }
-        }
+        
 
-        hrf.addExtension(typeId, requirement);
+        hrf.addExtension(extensionId, regExt.getContentType());
         result = Response.created(uriInfo.getAbsolutePathBuilder().path("root.xml").build()).build();
 
         return result;

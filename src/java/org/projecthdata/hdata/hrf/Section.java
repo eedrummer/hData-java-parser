@@ -97,7 +97,7 @@ public class Section extends org.projecthdata.hdata.schemas._2009._06.core.Secti
      * @param typeid
      */
     public void setUriTypeId(URI typeid) {
-        this.setTypeId(typeid.toString());
+        this.setExtensionId(typeid.toString());
     }
 
     /**
@@ -107,7 +107,7 @@ public class Section extends org.projecthdata.hdata.schemas._2009._06.core.Secti
      */
     public URI getUriTypeId() {
         try {
-            return new URI(this.getTypeId());
+            return new URI(this.getExtensionId());
         } catch (URISyntaxException ex) {
             Logger.getLogger(Section.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -175,7 +175,7 @@ public class Section extends org.projecthdata.hdata.schemas._2009._06.core.Secti
 
             for (org.projecthdata.hdata.schemas._2009._06.core.Section i : super.getSection()) {
                 if (i.getPath().equals(section.getPath())) {
-                    if (i.getTypeId().equals(section.getUriTypeId().toString())) {
+                    if (i.getExtensionId().equals(section.getUriTypeId().toString())) {
                         return (Section) super.getSection().get(super.getSection().indexOf(section));
                     } else {
                         throw new SectionPathExistsException();

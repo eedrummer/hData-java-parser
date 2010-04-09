@@ -64,7 +64,11 @@
         <delete dir="classes"/>
         <delete dir="dist"/>
     </target>
-    
+
+    <target name="clean-deps">
+        <delete dir="lib"/>
+    </target>
+
     <target name="compile" depends="init-ivy,get-deps,generate-jaxb-code">
         <mkdir dir="classes"/>
         <javac srcdir="gen-src:src/java" destdir="classes">

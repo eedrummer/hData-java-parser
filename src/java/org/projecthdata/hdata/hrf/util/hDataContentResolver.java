@@ -5,6 +5,7 @@
 
 package org.projecthdata.hdata.hrf.util;
 
+import com.google.common.base.Predicate;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -15,7 +16,15 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.JAXBIntrospector;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.projecthdata.hdata.hrf.serialization.HRFSerializer;
+import org.projecthdata.hdata.resources.utils.HDataRestConfig;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 
 /**
  *
@@ -50,6 +59,37 @@ public class hDataContentResolver {
         }
     }
 
+    public void scanClassPath(String classpath) {
+
+        Properties props = new java.util.Properties();
+
+        Predicate<String> filter = new FilterBuilder().include(classpath + ".*");
+
+        Reflections ref = new Reflections(new ConfigurationBuilder()
+              .filterInputsBy(filter)
+              .setScanners(new SubTypesScanner(), new TypeAnnotationsScanner())
+              .setUrls(ClasspathHelper.getUrlsForPackagePrefix(classpath)));
+
+        for(Class i : ref.getTypesAnnotatedWith(XmlRootElement.class))  {
+            try {
+                JAXBContext ctx = JAXBContext.newInstance(i);
+                Logger.getLogger(HDataRestConfig.class.getName()).log(Level.INFO, i.getName());
+                props.setProperty(i.getName(), ctx.createJAXBIntrospector().getElementName(JAXBIntrospector.getValue(i.newInstance())).getNamespaceURI());
+
+                this.loadExtensionsFromProperties(props);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(hDataContentResolver.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(hDataContentResolver.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (JAXBException ex) {
+                Logger.getLogger(hDataContentResolver.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(hDataContentResolver.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(hDataContentResolver.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 
     public static URI resolveClassToUri(Object o) {
         URI result = null;

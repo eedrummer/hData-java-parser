@@ -44,10 +44,10 @@ public class HRFFileSystemNotifier implements UpdateNotifier {
 
         HDataRestConfig cfg = HDataRestConfig.getInstance(rc);
 
-        FileSystemHelper.deleteDirectory(new File("/tmp/hrf/" + hrf.getRoot().getDocumentId()));
+        FileSystemHelper.deleteDirectory(new File("/tmp/hrf/" + hrf.getRoot().getId()));
 
         try {
-            cfg.getSerializer().serialize(new File("/tmp/hrf/" + hrf.getRoot().getDocumentId()), hrf);
+            cfg.getSerializer().serialize(new File("/tmp/hrf/" + hrf.getRoot().getId()), hrf);
         } catch (IOException ex) {
             Logger.getLogger(HDataResource.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -58,7 +58,7 @@ public class HRFFileSystemNotifier implements UpdateNotifier {
 
     public void deleteHrf(HRF hrf) throws Exception {
 
-        if (! FileSystemHelper.deleteDirectory(new File("/tmp/hrf/" + hrf.getRoot().getDocumentId()))) {
+        if (! FileSystemHelper.deleteDirectory(new File("/tmp/hrf/" + hrf.getRoot().getId()))) {
             throw new Exception();
         }
 
